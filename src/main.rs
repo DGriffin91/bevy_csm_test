@@ -1,6 +1,6 @@
 use bevy::math::{vec3, vec4};
 use bevy::pbr::DirectionalLightShadowMap;
-use bevy::{pbr::CascadeShadowConfigBuilder, prelude::*};
+use bevy::prelude::*;
 use bevy_basic_camera::{CameraController, CameraControllerPlugin};
 
 use std::f32::consts::PI;
@@ -8,7 +8,7 @@ use std::f32::consts::PI;
 fn main() {
     let mut app = App::new();
     app.add_plugins(DefaultPlugins)
-        .add_systems(Startup, setup)
+        .add_startup_system(setup)
         .insert_resource(DirectionalLightShadowMap { size: 4096 })
         .add_plugin(CameraControllerPlugin)
         .run();
@@ -31,9 +31,19 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ..default()
     });
 
+    const HALF_SIZE: f32 = 50.0;
     commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
             shadows_enabled: true,
+            shadow_projection: OrthographicProjection {
+                left: -HALF_SIZE,
+                right: HALF_SIZE,
+                bottom: -HALF_SIZE,
+                top: HALF_SIZE,
+                near: -10.0 * HALF_SIZE,
+                far: 10.0 * HALF_SIZE,
+                ..default()
+            },
             ..default()
         },
 
@@ -43,12 +53,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..default()
         },
 
-        cascade_shadow_config: CascadeShadowConfigBuilder {
-            num_cascades: 3,
-            maximum_distance: 200.0,
-            ..default()
-        }
-        .into(),
         ..default()
     });
 }
