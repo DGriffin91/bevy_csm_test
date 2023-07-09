@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = { git = "https://github.com/bevyengine/bevy" }
-bevy_basic_camera = { git = "https://github.com/DGriffin91/bevy_basic_camera", branch = "bevy-main" }
+bevy = { version = "0.11" }
+bevy_basic_camera = { git = "https://github.com/DGriffin91/bevy_basic_camera" }
